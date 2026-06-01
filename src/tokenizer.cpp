@@ -11,7 +11,7 @@ using namespace std;
 
 static set<string> keywords = {};
 static set<string> operators = {"+", "-", "=", "/", "*"};
-static set<string> digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+static set<string> digits = {"0" , "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
 string tokenToString(Token token)
 {
@@ -97,7 +97,7 @@ bool Lexer::isTokenComplete(Token current_token, char currentChar, char nextChar
     else if (current_token.type == TokenType::String)
     {
 
-        if (nextChar == '"')
+        if (currentChar == '"' && (nextChar == ' ' || nextChar == '\n'))
         {
             return true;
         }
@@ -161,6 +161,10 @@ void Lexer::addToToken(Token &token, char currentChar)
 
 void Lexer::finalizeToken(Token &token)
 {
+    if (token.type == TokenType::String){
+        token.content = stringutil::strip(token.content , '"');
+    }
+
     completedTokens.push_back(token);
     token = Token{"", TokenType::Unknown};
 }

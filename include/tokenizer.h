@@ -5,7 +5,6 @@
 #include <string>
 #include <fstream>
 
-
 enum class TokenType
 {
     Keyword,
