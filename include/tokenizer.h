@@ -18,24 +18,25 @@ enum class TokenType
 
 std::string tokenTypeToString(TokenType type);
 
-struct Token {
+struct Token
+{
     std::string content;
     TokenType type;
 };
 
-class Lexer {
-    public:
+class Lexer{
+public:
     Lexer();
     std::list<Token> tokenize(std::string input);
     std::string serializeTokensToString();
     void writeTokensToAFile(std::ofstream &out);
 
-    private:
+private:
     int currentLine;
     int currentIndex;
     std::list<Token> completedTokens;
     Token currentToken;
-    
+
     bool isStartOfToken(char currentChar);
     bool isTokenComplete(Token current_token, char currentChar, char nextChar);
     TokenType getTokenType(char startChar);
@@ -44,6 +45,5 @@ class Lexer {
     bool isTokenEmpty(Token token);
     void startToken(Token &token, char currentChar);
 };
- 
 
 #endif

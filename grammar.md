@@ -1,8 +1,9 @@
 # BNF Grammar for KoolScipt
 
 ```
-<stat>
 
+<assg> ::= "var " <id> "=" <expr>
+<id> ::= string
 <expr>
 
 ```

@@ -3,29 +3,47 @@
 
 #include <optional>
 #include <string>
+#include "tokenizer.h"
 
-struct Node {
-
+struct BaseNode
+{
+    virtual ~BaseNode() = default;
 };
 
-struct SimpleExpr {     
-    virtual ~SimpleExpr() = default;
+
+struct Id : BaseNode{
+    std::string var;
 };
 
-struct NumberExpr : SimpleExpr {
+struct Assg : BaseNode{
+    Id id;
+    BaseExpr value;
+};
+
+struct BaseExpr : BaseNode {     
+    virtual ~BaseExpr() = default;
+};
+
+struct NumberExpr : BaseExpr {
     double value;
 };
 
-struct StringExpr : SimpleExpr {
+struct StringExpr : BaseExpr {
     std::string value;
 };
 
-struct BoolExpr : SimpleExpr {
+struct BoolExpr : BaseExpr {
     bool value;
 };
 
 class Parser {
-    public
+public:
+    Parser();
+    BaseNode parse(std::list<Token> tokenList);
+private:
+    BaseNode current();
+    BaseNode next();
+
 };
 
 
