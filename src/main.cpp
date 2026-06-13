@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 #include <sstream>
 #include <fstream>
-#include "tokenizer.h"
+#include "lexer.h"
 using namespace std;
 
 int main(int argc , char *argv[])
 {
 
-    if (argc < 2){
+    if (argc < 3){
         cerr << "Incorrect usage, Correct usage..." << endl;
         cerr << "./tokenizer <input_filepath> <output_filepath>" << endl;
         return EXIT_FAILURE;
@@ -32,8 +32,8 @@ int main(int argc , char *argv[])
 
     ofstream out(out_filepath);
 
-    Lexer lexer;
-    list<Token> tokens = lexer.tokenize(source);
+    Lexer lexer(source);
+    vector<Token> tokens = lexer.tokenize();
     if (!out) {
         cerr << "Runtime Error: Could not access output file @" << out_filepath << endl;
         return EXIT_FAILURE;

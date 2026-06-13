@@ -1,7 +1,7 @@
-#include "tokenizer.h"
+#include "lexer.h"
 #include "stringutil.h"
 #include <string>
-#include <list>
+#include <vector>
 #include <set>
 #include <sstream>
 #include <iostream>
@@ -9,9 +9,9 @@
 
 using namespace std;
 
-static set<string> keywords = {};
+static set<string> keywords = {"VAR"};
 static set<string> operators = {"+", "-", "=", "/", "*"};
-static set<string> digits = {"0" , "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+static set<string> digits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
 string tokenToString(Token token)
 {
@@ -55,7 +55,11 @@ string tokenTypeToString(TokenType type)
     }
 }
 
-Lexer::Lexer() : currentLine(1), currentIndex(0), currentToken{"", TokenType::Unknown} {}
+Lexer::Lexer(std::string input)
+    : currentLine(1),
+      currentIndex(0),
+      target(std::move(input)),
+      currentToken{"", TokenType::Unknown} {}
 
 bool Lexer::isStartOfToken(char currentChar)
 {
@@ -161,8 +165,9 @@ void Lexer::addToToken(Token &token, char currentChar)
 
 void Lexer::finalizeToken(Token &token)
 {
-    if (token.type == TokenType::String){
-        token.content = stringutil::strip(token.content , '"');
+    if (token.type == TokenType::String)
+    {
+        token.content = stringutil::strip(token.content, '"');
     }
 
     completedTokens.push_back(token);
@@ -203,14 +208,14 @@ string Lexer::serializeTokensToString()
     return output;
 }
 
-list<Token> Lexer::tokenize(string input)
+vector<Token> Lexer::tokenize()
 {
     completedTokens.clear();
     currentToken = Token{"", TokenType::Unknown};
     currentLine = 1;
     currentIndex = 0;
 
-    istringstream stream(input);
+    istringstream stream(target);
     string line;
 
     while (getline(stream, line))

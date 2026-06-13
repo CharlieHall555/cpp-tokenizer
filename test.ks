@@ -1,4 +1,4 @@
-hello = 20
+VAR hello = 20
 
 a = "alpha"
 

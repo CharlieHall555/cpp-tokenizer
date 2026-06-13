@@ -1,7 +1,7 @@
-#ifndef TOKENIZER_H
-#define TOKENIZER_H
+#ifndef LEXER_H
+#define LEXER_H
 
-#include <list>
+#include <vector>
 #include <string>
 #include <fstream>
 
@@ -26,15 +26,16 @@ struct Token
 
 class Lexer{
 public:
-    Lexer();
-    std::list<Token> tokenize(std::string input);
+    explicit Lexer(std::string input);
+    std::vector<Token> tokenize();
     std::string serializeTokensToString();
     void writeTokensToAFile(std::ofstream &out);
 
 private:
     int currentLine;
     int currentIndex;
-    std::list<Token> completedTokens;
+    std::string target;
+    std::vector<Token> completedTokens;
     Token currentToken;
 
     bool isStartOfToken(char currentChar);

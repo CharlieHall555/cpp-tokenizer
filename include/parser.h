@@ -3,7 +3,9 @@
 
 #include <optional>
 #include <string>
-#include "tokenizer.h"
+#include <vector>
+#include <memory>
+#include "lexer.h"
 
 struct BaseNode
 {
@@ -13,11 +15,6 @@ struct BaseNode
 
 struct Id : BaseNode{
     std::string var;
-};
-
-struct Assg : BaseNode{
-    Id id;
-    BaseExpr value;
 };
 
 struct BaseExpr : BaseNode {     
@@ -36,14 +33,20 @@ struct BoolExpr : BaseExpr {
     bool value;
 };
 
+struct Assg : BaseNode{
+    Id id;
+    std::unique_ptr<BaseNode> value;
+};
+
 class Parser {
 public:
-    Parser();
-    BaseNode parse(std::list<Token> tokenList);
+    Parser(std::vector<Token>& inputTokens);
+    std::unique_ptr<BaseNode> parse();
 private:
-    BaseNode current();
-    BaseNode next();
-
+    std::vector<Token> tokenList;
+    int tokenIndex = 0;
+    Token& current();
+    Token& next();
 };
 
 
